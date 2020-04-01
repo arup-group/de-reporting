@@ -54,7 +54,7 @@ export default function validator(state) {
                 return 'Please enter the client\'s contact details'
               }
           }
-          console.log(state)
+          
           return ''
 
         case 'Presentations and Talks':
@@ -90,7 +90,7 @@ export default function validator(state) {
             return 'Please specify training mode'
           }
 
-          console.log(state)
+          
           return ''
 
         case 'Recruitment':
@@ -142,11 +142,11 @@ export default function validator(state) {
             return 'Please provide your location'
           }
 
-          if (state.activeStep === 1 && state.details['continuousImprovementTypeSelector'] === 'Other') {
+          if (state.activeStep === 1 && state.details['continuousImprovementType'] === 'Other' && !state.details['otherType']) {
             return 'Please specify the activity type'
           }
 
-          if (state.activeStep === 1 && !state.details['continuousImprovementTypeSelector']) {
+          if (state.activeStep === 1 && !state.details['continuousImprovementType']) {
             return 'Please specify the activity type'
           }
 

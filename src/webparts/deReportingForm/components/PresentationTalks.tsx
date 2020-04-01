@@ -63,6 +63,13 @@ export const PresentationTalks: React.FC<PresentationTalksProps> = (Props: Prese
         setDetails((prevState => {
             let newState = prevState
             newState[e.target.name] = e.target.value
+
+            if (newState['presentationType'] != 'Other') {
+                newState['otherType'] = null
+            } else {
+                newState['additionalLink'] = null
+            }
+            console.log(newState)
             return newState
         }))
         

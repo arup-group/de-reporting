@@ -61,6 +61,15 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
                 newState['ReviewInnovationDescription'] = null
             }
 
+            if (newState['TaskType'] != 'Other') {
+                newState['otherType'] = null
+            }
+
+            if (newState['TaskType'] === 'Other') {
+                newState['additionalLink'] = null
+            }
+
+            console.log(newState)
             return newState
         }))
 

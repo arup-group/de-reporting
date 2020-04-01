@@ -49,6 +49,14 @@ export const ContinuousImprovement: React.FC<ContinuousImprovementProps> = (Prop
         setDetails((prevState => {
             let newState = prevState
             newState[e.target.name] = e.target.value
+
+            if (newState['continuousImprovementType'] === 'Other') {
+                newState['additionalLink'] = null
+            } else {
+                newState['otherType'] = null
+            }
+
+            console.log(newState)
             return newState
         }))
         
@@ -70,8 +78,8 @@ export const ContinuousImprovement: React.FC<ContinuousImprovementProps> = (Prop
                         required
                         labelId='continuousImprovementTypeSelector'
                         id='continuousImprovementTypeSelector'
-                        name='continuousImprovementTypeSelector'
-                        value={details['continuousImprovementTypeSelector']}
+                        name='continuousImprovementType'
+                        value={details['continuousImprovementType']}
                         onChange={handleChange}
                     >
                     <MenuItem value={'Invest in Arup'}>Invest in Arup</MenuItem>
@@ -110,7 +118,7 @@ export const ContinuousImprovement: React.FC<ContinuousImprovementProps> = (Prop
         </Grid>
 
 
-        {(details['continuousImprovementTypeSelector'] != 'Other' && 'continuousImprovementTypeSelector' in details) && (
+        {(details['continuousImprovementType'] != 'Other' && 'continuousImprovementType' in details) && (
             <FormControl className={classes.textField}>
                 <FormLabel className={classes.textPadding}>
                     Provide links to any related content
@@ -128,7 +136,7 @@ export const ContinuousImprovement: React.FC<ContinuousImprovementProps> = (Prop
             </FormControl>
         )}
         
-        {details['continuousImprovementTypeSelector'] === 'Other' && (
+        {details['continuousImprovementType'] === 'Other' && (
             <Grid container spacing={5}>
                 <Grid item xs={5}>
                     <FormControl className={classes.formControl}>

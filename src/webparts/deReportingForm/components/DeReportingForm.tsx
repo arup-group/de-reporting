@@ -16,6 +16,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import validator from '../../../utils/FormValidate';
+import { Review } from './ReviewPage'
 
 const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   appBar: {
@@ -72,25 +73,29 @@ export const DeReportingForm: React.FC<{}> = () => {
       case 0:
         // activity type page
         return <ActivityTypeForm 
-                  setActivityType={
-                          ((a) => setState({...state, activityType: a}))
-                        } 
+                  setActivityType={((a) => setState(prevState => {
+                    let newState = prevState
+                    
+                    if (prevState.activityType != a) {
+                      newState.details = {}
+                    }
+                    newState.activityType = a
+                    return newState
+                  }))} 
+
                   activityType={state.activityType}
               />;
       case 1:
         // details page
         return <DetailsForm 
-                  setDetails={(d) => setState({...state, details: d})} 
+                  setDetails={((d) => setState(prevState => ({...prevState, details: d})))} 
                   activityType={state.activityType}
                   subState={state.details}
                 />;
       case 2:
         // review page
-        return <ActivityTypeForm 
-                    setActivityType={
-                            ((a) => setState({...state, activityType: a}))
-                          } 
-                    activityType={state.activityType}
+        return <Review 
+                    details={{activityType: state.activityType, ...state['details']}}
                 />;
       default:
         throw new Error('Unknown step');
@@ -122,7 +127,6 @@ export const DeReportingForm: React.FC<{}> = () => {
   }
 
   const handleBack = () => {
-    console.log(state)
     setState(prevState => ({...prevState, 
         activeStep: prevState.activeStep - 1}))
   }
