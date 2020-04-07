@@ -12,24 +12,24 @@ export default function validator(state) {
             return 'Please provide your location'
           }
     
-          if (state.activeStep === 1 && !(/^\d{6}(-\d{2})?$/.exec(state.details['ProjectNumber']))) {
+          if (state.activeStep === 1 && !(/^\d{6}(-\d{2})?$/.exec(state.details['projectNumber']))) {
             return 'Please enter a valid project number'
           }
     
-          if (state.activeStep === 1 && !state.details['TaskType']) {
+          if (state.activeStep === 1 && !state.details['taskType']) {
             return 'Please specify the type of the task that was undertaken'
           }
     
-          if (state.activeStep === 1 && !state.details['ProjectDescription']) {
+          if (state.activeStep === 1 && !state.details['projectDescription']) {
     
             return 'Please provide a project description'
           }
     
           if (state.activeStep === 1 && 
-            (state.details['TaskType'] === 'Review' || state.details['TaskType'] === 'Innovation') &&
-            !state.details['ReviewInnovationDescription']) {
+            (state.details['taskType'] === 'Review' || state.details['taskType'] === 'Innovation') &&
+            !state.details['reviewInnovationDescription']) {
     
-            return `Please describe the ${state.details['TaskType'].toLowerCase()} ${state.details['TaskType'] === 'Innovation' ? 'task' : ''}`
+            return `Please describe the ${state.details['taskType'].toLowerCase()} ${state.details['taskType'] === 'Innovation' ? 'task' : ''}`
           }
           
           return ''

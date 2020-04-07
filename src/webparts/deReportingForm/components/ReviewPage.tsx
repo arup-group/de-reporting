@@ -26,7 +26,7 @@ const prettyAttributes = {
     ContactDetails: 'Contact details',
     followupInformation: 'Additional follow-up information',
     continuousImprovementType: 'Type',
-    otherType: 'Type',
+    otherType: 'Specify type',
     minutesLink: 'Link to minutes',
     meetingDescription: 'Describe the meeting',
     DEActivitiesImplemented: 'Will DE activities be implemented?',

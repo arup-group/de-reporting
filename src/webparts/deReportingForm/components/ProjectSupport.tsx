@@ -56,20 +56,20 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
             let newState = prevState
             newState[e.target.name] = e.target.value
             
-            if ((e.target.name === 'TaskType' && e.target.value != 'Review') &&
-                (e.target.name === 'TaskType' && e.target.value != 'Innovation')) {
-                newState['ReviewInnovationDescription'] = null
+            if ((e.target.name === 'taskType' && e.target.value != 'Review') &&
+                (e.target.name === 'taskType' && e.target.value != 'Innovation')) {
+                newState['reviewInnovationDescription'] = null
             }
 
-            if (newState['TaskType'] != 'Other') {
+            if (newState['taskType'] != 'Other') {
                 newState['otherType'] = null
             }
 
-            if (newState['TaskType'] === 'Other') {
+            if (newState['taskType'] === 'Other') {
                 newState['additionalLink'] = null
             }
 
-            console.log(newState)
+            
             return newState
         }))
 
@@ -87,11 +87,11 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
                     <TextField
                     required
                     id="ProjectNumber"
-                    name="ProjectNumber"
+                    name="projectNumber"
                     label="Project Number"
                     fullWidth
                     autoComplete="projnumber"
-                    value={details['ProjectNumber']}
+                    value={details['projectNumber']}
                     onChange={handleChange}
                     />
                 </FormControl>
@@ -130,8 +130,8 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
                 <Select
                     labelId='taskTypeSelector'
                     id='taskTypeSelector'
-                    name='TaskType'
-                    value={details['TaskType']}
+                    name='taskType'
+                    value={details['taskType']}
                     onChange={handleChange}
                 >
                 <MenuItem value={'Authoring DE Specifications/ Execution Plan'}>Authoring DE specifications/execution plan</MenuItem>
@@ -145,7 +145,7 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
                 </Select>
             </FormControl>
             </Grid>
-            {details['TaskType'] === 'Other' && (
+            {details['taskType'] === 'Other' && (
                 <Grid item xs={5}>
                     <FormControl className={classes.taskTypeDropdown}>
                         <TextField
@@ -168,34 +168,34 @@ export const ProjectSupportDetails: React.FC<ProjectSupportProps> = (Props: Proj
                 <TextField
                     required
                     id='ProjectDescription'
-                    name='ProjectDescription'
+                    name='projectDescription'
                     label='Enter project description'
                     multiline
                     rows="4"
-                    defaultValue={details['ProjectDescription']}
+                    defaultValue={details['projectDescription']}
                     variant='outlined'
                     onChange={handleChange}
                 />
         </FormControl>
 
-        {(details['TaskType'] === 'Review' || details['TaskType'] === 'Innovation') && (
+        {(details['taskType'] === 'Review' || details['taskType'] === 'Innovation') && (
             <FormControl className={classes.textField}>
-                <FormLabel className={classes.textPadding}>Describe the {details['TaskType'].toLowerCase()} {details['TaskType'] === 'Innovation' ? 'task' : ''}</FormLabel>
+                <FormLabel className={classes.textPadding}>Describe the {details['taskType'].toLowerCase()} {details['taskType'] === 'Innovation' ? 'task' : ''}</FormLabel>
                 <TextField
                     required
                     id='ReviewInnovationDescription'
-                    name='ReviewInnovationDescription'
+                    name='reviewInnovationDescription'
                     label='Enter task description'
                     multiline
                     rows="4"
-                    defaultValue={details['ReviewInnovationDescription']}
+                    defaultValue={details['reviewInnovationDescription']}
                     variant='outlined'
                     onChange={handleChange}
                 />
             </FormControl>
         )}
         
-        {details['TaskType'] != 'Other' && (
+        {details['taskType'] != 'Other' && (
             <FormControl className={classes.textField}>
                 <FormLabel className={classes.textPadding}>
                     Provide links to any related content

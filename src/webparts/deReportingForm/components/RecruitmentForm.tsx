@@ -9,7 +9,7 @@ import { FormControl,
     makeStyles,
     Theme,
     StyleRules,
-    TextField} from '@material-ui/core';
+    TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme): StyleRules => ({
     textField: {

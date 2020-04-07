@@ -12,7 +12,7 @@ import { FormControl,
     TextField,
     RadioGroup,
     FormControlLabel,
-    Radio} from '@material-ui/core';
+    Radio } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme): StyleRules => ({
     formControl: {
@@ -59,8 +59,8 @@ export const ClientEngagementDetails: React.FC<ClientEngagementProps> = (Props: 
             newState[e.target.name] = e.target.value
 
             if (e.target.name === 'followup' && e.target.value === 'No') {
-                newState['ClientName'] = null
-                newState['ContactDetails'] = null
+                newState['clientName'] = null
+                newState['contactDetails'] = null
                 newState['followupInformation'] = null
             }
             
@@ -125,11 +125,11 @@ export const ClientEngagementDetails: React.FC<ClientEngagementProps> = (Props: 
                     <TextField
                     required
                     id="ClientName"
-                    name="ClientName"
+                    name="clientName"
                     label="Client Name"
                     fullWidth
                     autoComplete="clientname"
-                    value={details['ClientName']}
+                    value={details['clientName']}
                     onChange={handleChange}
                     />
                 </FormControl>
@@ -140,11 +140,11 @@ export const ClientEngagementDetails: React.FC<ClientEngagementProps> = (Props: 
                     <TextField
                     required
                     id="ContactDetails"
-                    name="ContactDetails"
-                    label="Contact Details"
+                    name="contactDetails"
+                    label="contact Details"
                     fullWidth
                     autoComplete="contactdetails"
-                    value={details['ContactDetails']}
+                    value={details['contactDetails']}
                     onChange={handleChange}
                     />
                 </FormControl>

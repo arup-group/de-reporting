@@ -55,8 +55,7 @@ export const ContinuousImprovement: React.FC<ContinuousImprovementProps> = (Prop
             } else {
                 newState['otherType'] = null
             }
-
-            console.log(newState)
+            
             return newState
         }))
         

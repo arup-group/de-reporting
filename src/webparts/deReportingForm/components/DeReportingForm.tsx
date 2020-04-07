@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import validator from '../../../utils/FormValidate';
 import { Review } from './ReviewPage'
+import submitActivity from '../../../utils/SubmitActivity'
 
 const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   appBar: {
@@ -57,7 +58,6 @@ const useStyles = makeStyles((theme: Theme): StyleRules  => ({
 
 const steps = ['Activity Type', 'Details', 'Review'];
 
-
 export const DeReportingForm: React.FC<{}> = () => {
  
   const classes = useStyles();
@@ -65,6 +65,8 @@ export const DeReportingForm: React.FC<{}> = () => {
     activeStep: 0,
     errorMessage: '',
     activityType: '',
+    activityDate: new Date(),
+    submitted: false,
     details: {}
   });
 
@@ -73,17 +75,19 @@ export const DeReportingForm: React.FC<{}> = () => {
       case 0:
         // activity type page
         return <ActivityTypeForm 
-                  setActivityType={((a) => setState(prevState => {
+                  setActivityTypeDate={((a) => setState(prevState => {
                     let newState = prevState
                     
-                    if (prevState.activityType != a) {
+                    if (prevState.activityType != a['activityType']) {
                       newState.details = {}
                     }
-                    newState.activityType = a
+
+                    newState.activityType = a['activityType']
+                    newState.activityDate = a['activityDate']
                     return newState
                   }))} 
 
-                  activityType={state.activityType}
+                  details={{activityType: state.activityType, activityDate: state.activityDate}}
               />;
       case 1:
         // details page
@@ -113,10 +117,27 @@ export const DeReportingForm: React.FC<{}> = () => {
     return validator(state)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
 
     // handle validation errors
-    const message = validateInputs()
+    let message = validateInputs()
+
+    // submit data if in review page
+    if (state.activeStep === 2) {
+      const data = {
+        activityDate: state.activityDate,
+        details: state.details
+      }
+      
+      try {
+        setState({...state, submitted: true})
+        await submitActivity(state.activityType, data)
+        setState({...state, submitted: false})
+      } catch (e) {
+        console.log(e)
+        message = 'There was an error with the submission! Please contact your office digital leader.'
+      }
+    }
 
     if (message != '') {
       validationError(message)
@@ -133,9 +154,11 @@ export const DeReportingForm: React.FC<{}> = () => {
 
 
   const handleNewSubmission = () => {
+
     setState(prevState => ({...prevState, 
       activeStep: 0, 
       activityType: '',
+      activityDate: new Date(),
       details: {}
   }))
   }
@@ -196,14 +219,24 @@ export const DeReportingForm: React.FC<{}> = () => {
                     </Button>
                   )}
                   
-                  <Button
+                  {!state.submitted ? (<Button
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
                     className={classes.button}
                   >
                     {state.activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+                  </Button>) : (
+                    <Button
+                    disabled
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    {'Submit'}
                   </Button>
+
+                  )}
                 </div>
               </React.Fragment>
             )}

@@ -69,7 +69,7 @@ export const PresentationTalks: React.FC<PresentationTalksProps> = (Props: Prese
             } else {
                 newState['additionalLink'] = null
             }
-            console.log(newState)
+            
             return newState
         }))
         
@@ -169,7 +169,7 @@ export const PresentationTalks: React.FC<PresentationTalksProps> = (Props: Prese
                     Provide links to any related content
                 </FormLabel>
                 <TextField
-                    id='additionalLinkc'
+                    id='additionalLink'
                     name='additionalLink'
                     label='Enter urls'
                     multiline
