@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
     },
     textPadding: {
         paddingBottom: theme.spacing(2)
+    },
+    hours: {
+        marginTop: theme.spacing(-2.5),
+        width: '50%'
     }
   }));
   
@@ -39,6 +43,7 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
     setDetails: (d: object) => void;
     activity: string;
     subState: object;
+    notBatch: boolean
   }
   
   export const GonogoAwardsInceptionDetails: React.FC<GonogoAwardsInceptionProps> = (Props: GonogoAwardsInceptionProps) => {
@@ -81,30 +86,18 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
                         </RadioGroup>
                 </FormControl>
             </Grid>
-            <Grid item xs={4}>
-                <FormControl className={classes.locationDropdown}>
-                    <InputLabel id='locationLabel'>
-                    Location*
-                    </InputLabel>
-                    <Select
-                        labelId='locationSelector'
-                        id='locationSelector'
-                        name='location'
-                        value={details['location']}
-                        onChange={handleChange}
-                    >
-                    <MenuItem value={'NSW'}>NSW</MenuItem>
-                    <MenuItem value={'VIC/SA'}>VIC/SA</MenuItem>
-                    <MenuItem value={'QLD'}>QLD</MenuItem>
-                    <MenuItem value={'WA'}>WA</MenuItem>
-                    <MenuItem value={'NZ'}>NZ</MenuItem>
-                    <MenuItem value={'SIN'}>SIN</MenuItem>
-                    <MenuItem value={'KL'}>KL</MenuItem>
-                    <MenuItem value={'PEN'}>PEN</MenuItem>
-                    <MenuItem value={'Regional'}>Regional</MenuItem>
-                    </Select>
+            {Props.notBatch && (<Grid item xs={4}>
+                <FormControl className={classes.hours}>
+                <TextField
+                    required
+                    id="hours"
+                    name="hours"
+                    label="Hours"
+                    value={details['hours']}
+                    onChange={handleChange}
+                />
                 </FormControl>
-            </Grid>
+            </Grid>)}
         </Grid>
 
         <Grid item xs={12}>

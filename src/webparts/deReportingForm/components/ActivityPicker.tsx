@@ -1,5 +1,5 @@
 import * as React from "react"
-import { makeStyles, StyleRules, Theme, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core"
+import { makeStyles, StyleRules, Theme, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox } from "@material-ui/core"
 
 const useStyles = makeStyles((theme: Theme): StyleRules => ({
     formControl: {
@@ -22,6 +22,8 @@ export const ActivityPicker: React.FC<ActivityPickerProps> = ({activity, setOutt
         setState(e.target.value)
         setOutterActivity(e)
     }
+
+   
 
     return (
         <React.Fragment>

@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
         width: '100%',
         marginTop: theme.spacing(2)
     },
+    batchTextField : {
+        margin: theme.spacing(1),
+        width: '100%',
+        marginTop: theme.spacing(5)
+    },
     locationDropdown: {
         margin: theme.spacing(1),
         width: '100%'
@@ -24,13 +29,18 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
     textPadding: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
+    },
+    hours: {
+        margin: theme.spacing(1),
+        width: '50%'
     }
     }));
     
 interface BidSupportProps {
-    setDetails: (d: object) => void;
-    activity: string;
-    subState: object;
+    setDetails: (d: object) => void
+    activity: string
+    subState: object
+    notBatch: boolean
   }
 
 
@@ -56,32 +66,20 @@ export const BidSupport: React.FC<BidSupportProps> = (Props: BidSupportProps) =>
         {Props.activity.charAt(0).toUpperCase() + Props.activity.slice(1).toLowerCase()}
         </Typography>
         <Grid container spacing={5}>
-            <Grid item xs={4}>
-                <FormControl className={classes.locationDropdown}>
-                    <InputLabel id='locationLabel'>
-                    Location*
-                    </InputLabel>
-                    <Select
-                        labelId='locationSelector'
-                        id='locationSelector'
-                        name='location'
-                        value={details['location']}
-                        onChange={handleChange}
-                    >
-                    <MenuItem value={'NSW'}>NSW</MenuItem>
-                    <MenuItem value={'VIC/SA'}>VIC/SA</MenuItem>
-                    <MenuItem value={'QLD'}>QLD</MenuItem>
-                    <MenuItem value={'WA'}>WA</MenuItem>
-                    <MenuItem value={'NZ'}>NZ</MenuItem>
-                    <MenuItem value={'SIN'}>SIN</MenuItem>
-                    <MenuItem value={'KL'}>KL</MenuItem>
-                    <MenuItem value={'PEN'}>PEN</MenuItem>
-                    <MenuItem value={'Regional'}>Regional</MenuItem>
-                    </Select>
-                </FormControl>
-            </Grid>
+            {Props.notBatch && (<Grid item xs={4}>
+            <FormControl className={classes.hours}>
+            <TextField
+                required
+                id="hours"
+                name="hours"
+                label="Hours"
+                value={details['hours']}
+                onChange={handleChange}
+            />
+            </FormControl>
+            </Grid>)}
         </Grid>
-        <FormControl className={classes.textField}>
+        <FormControl className={Props.notBatch ? classes.textField : classes.batchTextField}>
             <FormLabel className={classes.textPadding}>
                 Describe the input
             </FormLabel>

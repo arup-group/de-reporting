@@ -12,46 +12,67 @@ import { Gonogo,
     Other } from '../Models/SubmissionModels'
 
 
-export default async function submitActivity(activityType, data) {
+export async function submitBatchActivities(detailsList) {
     
+    for (let activity of detailsList) {
+        const data = {
+            activityDate: activity.activityDate,
+            hours: activity.hours,
+            milestone: activity.milestone,
+            techpillarFeature: activity.techpillarFeature, 
+            projectName: activity.projectName,
+            details: activity.details
+        }
+        await submitActivity(activity.activityType, data)
+
+    }
+}
+
+export default async function submitActivity(activityType, data) {
     let model
 
     switch (activityType) {
         case 'Client Engagement':
-            model = new ClientEngagement(data)
+            model = new ClientEngagement()
             break
         case 'Project Support':
-            model = new ProjectSupport(data)
+            model = new ProjectSupport()
             break
         case 'Presentations and Talks':
-            model = new PresentationsTalks(data)
+            if (data['presentationType'] != 'Other') {
+                data['otherType'] = null
+            }
+            model = new PresentationsTalks()
             break
         case 'Training Activity':
-            model = new Training(data)
+            model = new Training()
             break
         case 'Recruitment':
-            model = new Recruitment(data)
+            model = new Recruitment()
             break
         case 'DE Team Meetings':
-            model = new DeTeamMeeting(data)
+            model = new DeTeamMeeting()
             break
         case 'Bid Support':
-            model = new BidSupport(data)
+            model = new BidSupport()
             break
         case 'Continuous Improvement':
-            model = new ContinuousImprovement(data)
+            if (data['continuousImprovementType'] != 'Other') {
+                data['otherType'] = null
+            }
+            model = new ContinuousImprovement()
             break
         case 'Other':
-            model = new Other(data)
+            model = new Other()
             break
         case 'Bid Go No Go Meeting':
-            model = new Gonogo(data)
+            model = new Gonogo()
             break
         case 'Project Inception Meeting/Reviewed':
-            model = new Inception(data)
+            model = new Inception()
             break
         case 'Awards':
-            model = new Awards(data)
+            model = new Awards()
             break
         default:
             model = null
@@ -62,10 +83,9 @@ export default async function submitActivity(activityType, data) {
     }
 
     try {
-        await model.save()
+        await model.save(data)
     } catch (e) {
        throw e
-    }
-    
-    
+    }    
 }
+

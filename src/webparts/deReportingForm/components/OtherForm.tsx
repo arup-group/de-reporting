@@ -19,12 +19,17 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
         margin: theme.spacing(1),
         width: '100%'
     },
+    hours: {
+        margin: theme.spacing(1),
+        width: '50%'
+    }
     }))
     
 interface OtherProps {
     setDetails: (d: object) => void;
     activity: string;
     subState: object;
+    notBatch: boolean
   }
 
 
@@ -64,31 +69,18 @@ export const Other: React.FC<OtherProps> = (Props: OtherProps) => {
                         />
                     </FormControl>
             </Grid>
-            <Grid item xs={4}>
-                <FormControl className={classes.locationDropdown}>
-                    <InputLabel id='locationLabel'>
-                    Location* 
-                    </InputLabel>
-                    <Select
-                        required
-                        labelId='locationSelector'
-                        id='locationSelector'
-                        name='location'
-                        value={details['location']}
-                        onChange={handleChange}
-                    >
-                    <MenuItem value={'NSW'}>NSW</MenuItem>
-                    <MenuItem value={'VIC/SA'}>VIC/SA</MenuItem>
-                    <MenuItem value={'QLD'}>QLD</MenuItem>
-                    <MenuItem value={'WA'}>WA</MenuItem>
-                    <MenuItem value={'NZ'}>NZ</MenuItem>
-                    <MenuItem value={'SIN'}>SIN</MenuItem>
-                    <MenuItem value={'KL'}>KL</MenuItem>
-                    <MenuItem value={'PEN'}>PEN</MenuItem>
-                    <MenuItem value={'Regional'}>Regional</MenuItem>
-                    </Select>
+            {Props.notBatch && (<Grid item xs={4}>
+                <FormControl className={classes.hours}>
+                <TextField
+                    required
+                    id="hours"
+                    name="hours"
+                    label="Hours"
+                    value={details['hours']}
+                    onChange={handleChange}
+                />
                 </FormControl>
-            </Grid>
+            </Grid>)}
         </Grid>
         </React.Fragment>
     )

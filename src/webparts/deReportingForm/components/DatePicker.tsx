@@ -29,7 +29,6 @@ export const DatePicker: React.FC<DatePickerProps> = ({date, setOutterDate}) => 
         <React.Fragment>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
-            disableToolbar
             className={classes.datePicker}
             margin="normal"
             id="activityDate"

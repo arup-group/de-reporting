@@ -25,11 +25,18 @@
     "@pnp/sp": "^2.0.3",
     "@types/es6-promise": "0.0.33",
     "@types/material-ui": "^0.21.7",
+    "@types/qs": "^6.9.1",
     "@types/webpack-env": "1.13.1",
+    "axios": "^0.19.2",
     "date-fns": "^2.11.1",
+    "material-table": "^1.57.2",
+    "node-fetch": "^2.6.0",
     "office-ui-fabric-react": "6.189.2",
+    "qs": "^6.9.3",
     "react": "^16.13.1",
+    "react-data-table-component": "^6.9.1",
     "react-dom": "^16.13.1",
+    "styled-components": "^5.1.0",
     "typeface-roboto": "0.0.75"
   },
   "resolutions": {

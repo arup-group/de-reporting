@@ -4,7 +4,7 @@ import { DetailsForm } from './DetailsForm'
 import { Copyright } from './Copyright'
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import { makeStyles, Theme, Grid } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { StyleRules } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import validator from '../../../utils/FormValidate';
 import { Review } from './ReviewPage'
-import submitActivity from '../../../utils/SubmitActivity'
+import { submitBatchActivities } from '../../../utils/SubmitActivity'
 
 const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   appBar: {
@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   layout: {
     width: 'auto',
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: 620,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -54,6 +54,10 @@ const useStyles = makeStyles((theme: Theme): StyleRules  => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  multipleSubmission: {
+    marginTop: theme.spacing(-1),
+    marginLeft: theme.spacing(1)
+  }
 }));
 
 const steps = ['Activity Type', 'Details', 'Review'];
@@ -67,7 +71,12 @@ export const DeReportingForm: React.FC<{}> = () => {
     activityType: '',
     activityDate: new Date(),
     submitted: false,
-    details: {}
+    details: {
+      techpillarFeature: false,
+      milestone: false
+    },
+    batchDetails: [],
+    batchData: []
   });
 
   const getStepContent = () => {
@@ -79,33 +88,83 @@ export const DeReportingForm: React.FC<{}> = () => {
                     let newState = prevState
                     
                     if (prevState.activityType != a['activityType']) {
-                      newState.details = {}
+                      newState.details = {
+                        techpillarFeature: false,
+                        milestone: false
+                      }
                     }
 
                     newState.activityType = a['activityType']
                     newState.activityDate = a['activityDate']
+                    newState.details = {...newState.details,
+                      techpillarFeature: a['techpillarFeature'],
+                      milestone: a['milestone']
+                    }
+                    
                     return newState
                   }))} 
-
-                  details={{activityType: state.activityType, activityDate: state.activityDate}}
-              />;
+                  checkbox={{techpillarFeature: state.details['techpillarFeature'], milestone: state.details['milestone']}}
+                  details={{activityType: state.activityType, 
+                    activityDate: state.activityDate, 
+                    techpillarFeature: state.details.techpillarFeature,
+                    milestone: state.details.milestone
+                  }}
+              />
       case 1:
         // details page
         return <DetailsForm 
-                  setDetails={((d) => setState(prevState => ({...prevState, details: d})))} 
+                  setDetails={(d) => {
+                    
+                    setState((prevState: any) => {
+                    if (prevState.activityType != 'multiple') {
+                      
+                      return {...prevState, details: d}
+                    } 
+                    return {...prevState, batchDetails: d}
+                    })
+                  }}
                   activityType={state.activityType}
                   subState={state.details}
-                />;
+                  setValidationError={validationError}
+                  batchData={state.batchData}
+                  setBatchDataMain={((flattened, raw) => setState(prevState => ({...prevState, batchData: raw, batchDetails: flattened})))}
+                  batchDetails={state.batchDetails}
+                  notBatch={state.activityType != 'multiple'} 
+                />
       case 2:
         // review page
         return <Review 
-                    details={{activityType: state.activityType, ...state['details']}}
-                />;
+                    details={formatDataToSave()}
+                />
       default:
         throw new Error('Unknown step');
     }
   }
 
+  const formatDataToSave = () => {
+    if (state.activityType != 'multiple') {
+  
+      const formattedOut = {
+        activityType: state.activityType, 
+        activityDate: state.activityDate,
+        techpillarFeature: state.details.techpillarFeature,
+        milestone: state.details.milestone,
+        hours: state.details['hours'],
+        projectName: ''
+      }
+      let formattedDetails = {...state.details}
+      delete formattedDetails.techpillarFeature
+      delete formattedDetails.milestone
+      delete formattedDetails['hours']
+
+      return [{...formattedOut, details: formattedDetails}]
+    }
+    return state.batchDetails.map((activity) => {
+      delete activity.details.projectHours
+      delete activity.details.hours
+      return activity
+    })
+  }
   const validationError = (message: string) => {
     setState({...state, errorMessage: message})
     setTimeout(() => {
@@ -118,20 +177,18 @@ export const DeReportingForm: React.FC<{}> = () => {
   }
 
   const handleNext = async () => {
-
+    console.log('main state', state)
     // handle validation errors
     let message = validateInputs()
 
+
     // submit data if in review page
     if (state.activeStep === 2) {
-      const data = {
-        activityDate: state.activityDate,
-        details: state.details
-      }
       
       try {
+        let data = formatDataToSave()
         setState({...state, submitted: true})
-        await submitActivity(state.activityType, data)
+        await submitBatchActivities(data)
         setState({...state, submitted: false})
       } catch (e) {
         console.log(e)
@@ -154,17 +211,29 @@ export const DeReportingForm: React.FC<{}> = () => {
 
 
   const handleNewSubmission = () => {
-
     setState(prevState => ({...prevState, 
       activeStep: 0, 
       activityType: '',
       activityDate: new Date(),
-      details: {}
+      details: {
+        techpillarFeature: false,
+        milestone: false
+      },
+      batchData: [],
+      batchDetails: []
+  }))
+  }
+  
+  const handleMultiple = () => {
+    setState(prevState => ({...prevState, 
+      activeStep: 1,
+      activityType: 'multiple'
   }))
   }
 
   return (
     <React.Fragment>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
       <CssBaseline />
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
@@ -176,7 +245,7 @@ export const DeReportingForm: React.FC<{}> = () => {
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
-            Submit an activity
+            Digital activity submission
           </Typography>
           <Stepper activeStep={state.activeStep} className={classes.stepper} alternativeLabel>
             {steps.map((label) => (
@@ -212,6 +281,14 @@ export const DeReportingForm: React.FC<{}> = () => {
             ) : (
               <React.Fragment>
                 {getStepContent()}
+                
+                {state.activeStep == 0 && ( 
+                  <div className={classes.multipleSubmission}>
+                    or <Link onClick={handleMultiple}>submit multiple activities.</Link>
+                  </div>
+                  )
+                
+                  }
                 <div className={classes.buttons}>
                   {state.activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>

@@ -36,13 +36,17 @@ const useStyles = makeStyles((theme: Theme): StyleRules => ({
     textPadding: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
+    },
+    hours: {
+        width: '50%'
     }
-    }));
+    }))
     
 interface ClientEngagementProps {
     setDetails: (d: object) => void;
     activity: string;
     subState: object;
+    notBatch: boolean
   }
 
 
@@ -79,42 +83,30 @@ export const ClientEngagementDetails: React.FC<ClientEngagementProps> = (Props: 
             <Grid item xs={6}>
                 <FormControl className={classes.formControl}>
                     <FormLabel className={classes.textPadding}>Was there any follow-up?*</FormLabel>
-                        <RadioGroup 
-                            aria-label='followup'
-                            name='followup'
-                            value={details['followup']} 
-                            onChange={handleChange}
-                        >
-                        <FormControlLabel value={'Yes'} control={<Radio color='primary'/>} label='Yes'/>
-                        <FormControlLabel value={'No'} control={<Radio color='primary'/>} label='No'/>
-                        <FormControlLabel value='Maybe' control={<Radio color='primary'/>} label='Maybe'/>
-                        </RadioGroup>
-                </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-                <FormControl className={classes.locationDropdown}>
-                    <InputLabel id="locationLabel">
-                    Location*
-                    </InputLabel>
-                    <Select
-                        labelId="locationSelector"
-                        id="locationSelector"
-                        name='location'
-                        value={details['location']}
+                    <RadioGroup 
+                        aria-label='followup'
+                        name='followup'
+                        value={details['followup']} 
                         onChange={handleChange}
                     >
-                    <MenuItem value={'NSW'}>NSW</MenuItem>
-                    <MenuItem value={'VIC/SA'}>VIC/SA</MenuItem>
-                    <MenuItem value={'QLD'}>QLD</MenuItem>
-                    <MenuItem value={'WA'}>WA</MenuItem>
-                    <MenuItem value={'NZ'}>NZ</MenuItem>
-                    <MenuItem value={'SIN'}>SIN</MenuItem>
-                    <MenuItem value={'KL'}>KL</MenuItem>
-                    <MenuItem value={'PEN'}>PEN</MenuItem>
-                    <MenuItem value={'Regional'}>Regional</MenuItem>
-                    </Select>
+                    <FormControlLabel value={'Yes'} control={<Radio color='primary'/>} label='Yes'/>
+                    <FormControlLabel value={'No'} control={<Radio color='primary'/>} label='No'/>
+                    <FormControlLabel value='Maybe' control={<Radio color='primary'/>} label='Maybe'/>
+                    </RadioGroup>
                 </FormControl>
             </Grid>
+            {Props.notBatch && (<Grid item xs={4}>
+                <FormControl className={classes.hours}>
+                <TextField
+                    required
+                    id="hours"
+                    name="hours"
+                    label="Hours"
+                    value={details['hours']}
+                    onChange={handleChange}
+                />
+                </FormControl>
+            </Grid>)}
         </Grid>
 
         {(details['followup'] === 'Yes' || details['followup'] === 'Maybe') && (
@@ -141,7 +133,7 @@ export const ClientEngagementDetails: React.FC<ClientEngagementProps> = (Props: 
                     required
                     id="ContactDetails"
                     name="contactDetails"
-                    label="contact Details"
+                    label="Contact Details"
                     fullWidth
                     autoComplete="contactdetails"
                     value={details['contactDetails']}

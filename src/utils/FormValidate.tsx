@@ -1,15 +1,73 @@
-export default function validator(state) {
+import { format } from 'date-fns'
 
+export default function validator(state) {
+  
     switch (state.activityType) {
 
         case '':
           return 'Please select an activity type'
+        
+        case 'multiple':
+          if (state.activeStep === 0) {
+            return 'Please select an activity type'
+          }
+
+          console.log(state.batchDetails)
+          if (!state.batchDetails.length || state.batchDetails.some(activity => Object.keys(activity['details']).length?false:true)) {
+            return 'Please provide details for all activities'
+          }
+
+          if (state.activeStep === 1) {
+            let currentProject 
+            let cumulativeHours = 0
+            let errors = state.batchDetails.map( activity => { 
+              let message
+              cumulativeHours += parseFloat(activity.hours)
+              console.log(cumulativeHours, activity)
+              if (activity.projectName != currentProject) {
+                currentProject = activity.projectName
+                cumulativeHours = parseFloat(activity.hours)
+              }
+
+              
+              if (activity.hours === '') {
+                message = 'Please indicate the time spent on this activity'
+              } else {
+                let newActivity = activity
+                newActivity.details = {...newActivity.details, hours: activity.hours}
+                message = validator({...newActivity, activeStep: 1})
+              }
+              
+              if (cumulativeHours > parseFloat(activity.details.projectHours)) {
+                message =  activity.projectName + ': the total time spent on the activities is bigger than the hours spent on the project'
+              }
+
+              
+              if (message) {
+                return {
+                  activityType: activity.activityType, 
+                  activityDate: activity.activityDate, 
+                  projectName: activity.projectName, 
+                  message: message
+                }
+              }
+            })
+            
+            errors = errors.filter(x => x !== undefined)
+            
+
+            if (errors.some(x=>x?true:false)) {
+              return  errors[0].projectName + ' ' + errors[0].activityType + ': ' + errors[0].message.toLowerCase()
+            }
+          }
+
+          return ''
     
         case 'Project Support':
     
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
     
           if (state.activeStep === 1 && !(/^\d{6}(-\d{2})?$/.exec(state.details['projectNumber']))) {
@@ -37,8 +95,8 @@ export default function validator(state) {
         case 'Client Engagement':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
           
           if (state.activeStep === 1 && !state.details['followup']) {
@@ -60,8 +118,8 @@ export default function validator(state) {
         case 'Presentations and Talks':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['presentationMode']) {
@@ -82,8 +140,8 @@ export default function validator(state) {
         case 'Training Activity':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['trainingMode']) {
@@ -96,8 +154,8 @@ export default function validator(state) {
         case 'Recruitment':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['recruitmentDescription']) {
@@ -109,8 +167,8 @@ export default function validator(state) {
         case 'DE Team Meetings':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['minutesLink']) {
@@ -125,8 +183,8 @@ export default function validator(state) {
         
         case 'Bid Support':
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['inputDescription']) {
@@ -138,8 +196,8 @@ export default function validator(state) {
         case 'Continuous Improvement':
 
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && state.details['continuousImprovementType'] === 'Other' && !state.details['otherType']) {
@@ -155,8 +213,8 @@ export default function validator(state) {
         case 'Other':
           
           if (state.activeStep === 1 && 
-            Object.keys(state.details).indexOf('location') < 0){
-            return 'Please provide your location'
+            Object.keys(state.details).indexOf('hours') < 0){
+            return 'Please indicate the time spent on this activity'
           }
 
           if (state.activeStep === 1 && !state.details['otherType']) {
@@ -182,8 +240,8 @@ export default function validator(state) {
             return 'Please describe the DE activities that were undertaken'
           }
     
-          if (state.activeStep === 1 && !state.details['location']) {
-            return 'Please provide your location'
+          if (state.activeStep === 1 && !state.details['hours']) {
+            return 'Please indicate the time spent on this activity'
           }
     
           return ''
