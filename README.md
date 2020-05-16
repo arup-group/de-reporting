@@ -1,6 +1,10 @@
-# de-reporting-form 
+# de-reporting-form (in-development)
 
-This is where you include your WebPart documentation.
+This is an ongoing project to develop a web app containing an enhanced form for submitting digital activities by T&R staff members within the Australasia region. 
+
+The web app is developed using the Sharepoint Framework (SFx), so that it can be used as a Sharepoint component to be hosted on a Sharepoint page, or on a tab in MS Teams. You can find more information on SFx [here](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/sharepoint-framework-overview).
+
+The component is a single page application developed using TypeScript and React. It includes submission forms for tracking information on the various digital activities undertaken by Arup staff (for Bid Support, Client Engagement, Continuous Improvement, Inception Meetings, etc.). The web app also has a custom built component which consists in a nested, dynamic table (replicating a JSON object), that allows for batch submission of digital activities, with reference to their associated projects. The information on projects is retrieved from Timesheet data using the ADS CDS API.
 
 ### Install dependencies
 
