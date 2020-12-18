@@ -1,5 +1,6 @@
 import { Web } from "@pnp/sp/presets/all"
 import { format } from 'date-fns'
+import { CONFIG } from '../app.config';
 
 export class AbstractSubmission {
     
@@ -38,7 +39,7 @@ export class AbstractSubmission {
         this.techpillarFeature = data.techpillarFeature 
         this.projectName = data.projectName
 
-        const web = Web('https://arup.sharepoint.com/sites/TnRDigital_39-200/DEReporting')
+        const web = Web(`https://${CONFIG.MS_TENANT}.sharepoint.com/sites/${CONFIG.DB_ENDPOINT}`)
 
         try {
             const latestSubmission = await web.lists.getByTitle('Submission').items
@@ -94,7 +95,7 @@ export class AbstractSubmission {
     async getPreviousSubmissions() {
         
         
-        const web = Web('https://arup.sharepoint.com/sites/TnRDigital_39-200/DEReporting')
+        const web = Web(`https://${CONFIG.MS_TENANT}.sharepoint.com/sites/${CONFIG.DB_ENDPOINT}`)
 
         
         let currentUser
@@ -125,7 +126,7 @@ export class AbstractSubmission {
     }
 
     async getActivity(submissionId) {
-        const web = Web('https://arup.sharepoint.com/sites/TnRDigital_39-200/DEReporting')
+        const web = Web(`https://${CONFIG.MS_TENANT}.sharepoint.com/sites/${CONFIG.DB_ENDPOINT}`)
         
         try {
             const activity = await web.lists.getByTitle(this.endpoint).items

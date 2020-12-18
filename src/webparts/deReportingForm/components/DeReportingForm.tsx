@@ -18,6 +18,7 @@ import Alert from '@material-ui/lab/Alert';
 import validator from '../../../utils/FormValidate';
 import { Review } from './ReviewPage'
 import { submitBatchActivities } from '../../../utils/SubmitActivity'
+import { ADS } from '../../../Models/ADS'
 
 const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   appBar: {
@@ -55,20 +56,20 @@ const useStyles = makeStyles((theme: Theme): StyleRules  => ({
     marginLeft: theme.spacing(1),
   },
   multipleSubmission: {
-    marginTop: theme.spacing(-1),
+    marginTop: theme.spacing(2),
     marginLeft: theme.spacing(1)
   }
 }));
 
-const steps = ['Activity Type', 'Details', 'Review'];
+const steps = ['Activity Type', 'Details', 'Review']
 
 export const DeReportingForm: React.FC<{}> = () => {
  
   const classes = useStyles();
   const [state, setState] = React.useState({
-    activeStep: 0,
+    activeStep: 1,
     errorMessage: '',
-    activityType: '',
+    activityType: 'multiple',
     activityDate: new Date(),
     submitted: false,
     details: {
@@ -78,6 +79,12 @@ export const DeReportingForm: React.FC<{}> = () => {
     batchDetails: [],
     batchData: []
   });
+
+  let ads
+
+  React.useEffect(()=>{
+    ads = new ADS() 
+  }, [])
 
   const getStepContent = () => {
     switch (state.activeStep) {
@@ -205,15 +212,23 @@ export const DeReportingForm: React.FC<{}> = () => {
   }
 
   const handleBack = () => {
+    let nextStep
+    let activityType = state.activityType
+    if (state.activeStep == 0){
+      nextStep = state.activeStep + 1
+      activityType = 'multiple'
+    } else {
+      nextStep = state.activeStep - 1
+    }
     setState(prevState => ({...prevState, 
-        activeStep: prevState.activeStep - 1}))
+        activityType,
+        activeStep: nextStep}))
   }
-
 
   const handleNewSubmission = () => {
     setState(prevState => ({...prevState, 
-      activeStep: 0, 
-      activityType: '',
+      activeStep: 1, 
+      activityType: 'multiple',
       activityDate: new Date(),
       details: {
         techpillarFeature: false,
@@ -226,8 +241,8 @@ export const DeReportingForm: React.FC<{}> = () => {
   
   const handleMultiple = () => {
     setState(prevState => ({...prevState, 
-      activeStep: 1,
-      activityType: 'multiple'
+      activeStep: 0,
+      activityType: ''
   }))
   }
 
@@ -247,13 +262,24 @@ export const DeReportingForm: React.FC<{}> = () => {
           <Typography component="h1" variant="h4" align="center">
             Digital activity submission
           </Typography>
-          <Stepper activeStep={state.activeStep} className={classes.stepper} alternativeLabel>
+          {state.activityType != 'multiple' ? (
+            <Stepper activeStep={state.activeStep} className={classes.stepper} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
+          ) : (
+            <Stepper activeStep={state.activeStep-1} className={classes.stepper} alternativeLabel>
+            {steps.slice(1, steps.length).map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          )
+        }
           <React.Fragment>
             {state.activeStep === steps.length ? (
               <React.Fragment>
@@ -282,19 +308,19 @@ export const DeReportingForm: React.FC<{}> = () => {
               <React.Fragment>
                 {getStepContent()}
                 
-                {state.activeStep == 0 && ( 
+                {state.activeStep == 1 && state.activityType == 'multiple' && ( 
                   <div className={classes.multipleSubmission}>
-                    or <Link onClick={handleMultiple}>submit multiple activities.</Link>
+                    or <Link onClick={handleMultiple}>submit single activity.</Link>
                   </div>
                   )
                 
                   }
                 <div className={classes.buttons}>
-                  {state.activeStep !== 0 && (
+                  {state.activeStep != 1 || state.activityType != 'multiple' ? (
                     <Button onClick={handleBack} className={classes.button}>
-                      Back
+                        Back
                     </Button>
-                  )}
+                    ) : null}
                   
                   {!state.submitted ? (<Button
                     variant="contained"

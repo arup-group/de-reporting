@@ -4,9 +4,9 @@
     "name": "de-reporting-form-client-side-solution",
     "id": "dd3b7f46-9f0b-4575-948c-54fa60f15886",
     "version": "1.0.0.0",
-    "includeClientSideAssets": true,
+    "includeClientSideAssets": false,
     "skipFeatureDeployment": true,
-    "isDomainIsolated": true
+    "isDomainIsolated": false
   },
   "paths": {
     "zippedPackage": "solution/de-reporting-form.sppkg"

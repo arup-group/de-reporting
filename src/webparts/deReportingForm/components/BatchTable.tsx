@@ -4,7 +4,7 @@
 
 import * as React from "react"
 import DataTable from 'react-data-table-component';
-import { MuiThemeProvider, createMuiTheme, Menu, Box, Typography, makeStyles, Theme, StyleRules, IconButton, Tooltip, MenuItem, Dialog, DialogTitle, Button, DialogActions, DialogContent } from "@material-ui/core"
+import { MuiThemeProvider, createMuiTheme, Menu, Box, Typography, makeStyles, Theme, StyleRules, IconButton, Tooltip, MenuItem, Dialog, DialogTitle, Button, DialogActions, DialogContent, Link } from "@material-ui/core"
 import {ActivityTable} from './ActivityTable'
 import { format } from 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
