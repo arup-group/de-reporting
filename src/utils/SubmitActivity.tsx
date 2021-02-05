@@ -21,7 +21,8 @@ export async function submitBatchActivities(detailsList) {
             milestone: activity.milestone,
             techpillarFeature: activity.techpillarFeature, 
             projectName: activity.projectName,
-            details: activity.details
+            details: activity.details,
+            location: activity.location
         }
         await submitActivity(activity.activityType, data)
 

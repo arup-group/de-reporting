@@ -20,6 +20,8 @@ interface DetailsProps {
     setBatchDataMain: (flattened: Array<object>, raw: Array<object>) => void
     batchDetails: Array<object>
     notBatch: boolean
+    tableData: any
+    setTableDataMain: (tabledata: any) => void
   }
   
   export const DetailsForm: React.FC<DetailsProps> = (Props: DetailsProps) => {
@@ -36,6 +38,8 @@ interface DetailsProps {
                     batchData={Props.batchData}
                     setBatchDataMain={Props.setBatchDataMain}
                     batchDetails={Props.batchDetails}
+                    tableData={Props.tableData}
+                    setTableDataMain={Props.setTableDataMain}
                 />
         case 'Client Engagement':
             return <ClientEngagementDetails 

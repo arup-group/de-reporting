@@ -1,5 +1,6 @@
 import { Web } from "@pnp/sp/presets/all"
 import { format } from 'date-fns'
+import { ADS } from './ADS'
 import { CONFIG } from '../app.config';
 
 export class AbstractSubmission {
@@ -55,10 +56,8 @@ export class AbstractSubmission {
 
         // submit to submissions table
         let currentUser
-
         try{
             currentUser = await web.currentUser.get()
-            console.log(currentUser)
         } catch (e) {
             throw 'There was an error in getting user info: \n' + e
         }
@@ -70,7 +69,7 @@ export class AbstractSubmission {
             submissionDate: format(new Date(), 'MM/dd/yyyy'),
             activityDate: typeof(this.activityDate) === 'string' ? this.activityDate : format(this.activityDate, 'MM/dd/yyyy'),
             activityType: this.activityType,
-            location: 'SG',
+            location: data.location,
             hours: this.hours, 
             milestone: this.milestone ? 'Yes' : 'No', 
             techpillarFeature: this.techpillarFeature ? 'Yes' : 'No', 

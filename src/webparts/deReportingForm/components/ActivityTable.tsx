@@ -31,10 +31,16 @@ const useStyles = makeStyles(theme => ({
     width: 35,
     paddingBottom: theme.spacing(2.5)
   },
-  checkbox: {
-    alignItems:"center",
-    justifyContent: "center"
-  }
+  techPillarCheckbox: {
+    alignItems:"left",
+    justifyContent: "left",
+    marginLeft: theme.spacing(-5)
+  },
+  milestoneCheckbox: {
+    alignItems:"left",
+    justifyContent: "left",
+    marginLeft: theme.spacing(-2)
+  },
 }))
 
 const theme = createMuiTheme({
@@ -115,6 +121,7 @@ export const ActivityTable: React.FC<Props> = ({ propRows, projectDate, projectH
   const deleteRow = (id) => {
     let rows = state.rows
     rows = rows.filter((row, j) => j != id)
+    console.log(rows)
     setState(prevState => ({...prevState, rows}))
     updateRows(rows)
   }
@@ -196,9 +203,9 @@ export const ActivityTable: React.FC<Props> = ({ propRows, projectDate, projectH
   const checkbox = (id, col) => (
     
       <FormControlLabel
-      className={classes.checkbox}
       control={
         <Checkbox
+          className={col === 'milestone' ? classes.milestoneCheckbox : classes.techPillarCheckbox}
           key={Math.random()}
           checked={state.rows[id][col]}
           onChange={(e) => handleChange(e, id)}
@@ -320,8 +327,8 @@ export const ActivityTable: React.FC<Props> = ({ propRows, projectDate, projectH
                 {state.rows.map((row, id) => (
                   <TableRow key={id}>
                     <TableCell key={'activity' + id.toString()}>{acitvityPicker(id)}</TableCell>
-                    <TableCell key={key+1} align='right'>{checkbox(id, 'techpillarFeature')}</TableCell>
-                    <TableCell key={key+2} align='right'>{checkbox(id, 'milestone')}</TableCell>
+                    <TableCell key={key+1} align='center'>{checkbox(id, 'techpillarFeature')}</TableCell>
+                    <TableCell key={key+2} align='center'>{checkbox(id, 'milestone')}</TableCell>
                     <TableCell key={key}>{hoursField(id)}</TableCell>
                     <TableCell key={'details' + id.toString()}>{detailsIcon(id)}</TableCell>
                     <TableCell key={'delete' + id.toString()}>{deleteIcon(id)}</TableCell>

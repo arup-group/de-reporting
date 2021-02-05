@@ -70,7 +70,7 @@ export default function validator(state) {
             return 'Please indicate the time spent on this activity'
           }
     
-          if (state.activeStep === 1 && !(/^\d{6}(-\d{2})?$/.exec(state.details['projectNumber']))) {
+          if (state.activeStep === 1 && !(/^\d{8}(-\d{2})?$/.exec(state.details['projectNumber']))) {
             return 'Please enter a valid project number'
           }
     

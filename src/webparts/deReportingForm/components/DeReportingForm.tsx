@@ -18,7 +18,6 @@ import Alert from '@material-ui/lab/Alert';
 import validator from '../../../utils/FormValidate';
 import { Review } from './ReviewPage'
 import { submitBatchActivities } from '../../../utils/SubmitActivity'
-import { ADS } from '../../../Models/ADS'
 
 const useStyles = makeStyles((theme: Theme): StyleRules  => ({
   appBar: {
@@ -77,14 +76,9 @@ export const DeReportingForm: React.FC<{}> = () => {
       milestone: false
     },
     batchDetails: [],
-    batchData: []
+    batchData: [],
+    tableData: []
   });
-
-  let ads
-
-  React.useEffect(()=>{
-    ads = new ADS() 
-  }, [])
 
   const getStepContent = () => {
     switch (state.activeStep) {
@@ -136,7 +130,9 @@ export const DeReportingForm: React.FC<{}> = () => {
                   batchData={state.batchData}
                   setBatchDataMain={((flattened, raw) => setState(prevState => ({...prevState, batchData: raw, batchDetails: flattened})))}
                   batchDetails={state.batchDetails}
-                  notBatch={state.activityType != 'multiple'} 
+                  tableData = {state.tableData}
+                  setTableDataMain = {(tableData) => setState({...state, tableData})}
+                  notBatch={state.activityType != 'multiple'}
                 />
       case 2:
         // review page
