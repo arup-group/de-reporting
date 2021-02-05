@@ -1,4 +1,4 @@
-# de-reporting-form (in-development)
+# de-reporting-form
 
 This is an ongoing project to develop a web app containing an enhanced form for submitting digital activities by T&R staff members within the Australasia region. 
 
