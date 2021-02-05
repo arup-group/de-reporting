@@ -1,7 +1,0 @@
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/deploy-azure-storage.schema.json",
-  "workingDir": "./temp/deploy/",
-  "account": "dereport",
-  "container": "dereportcontainer",
-  "accessKey": "B1prYEdRAmRWJ6VsBrn/3DU3xWWAAuun1hOdZJWwezqYLpzzYxQTS9VAkuUp9w3cwCnE8gZxlUSLq8uC9XBVUg=="
-}
