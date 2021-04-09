@@ -193,13 +193,22 @@ export const BatchTable: React.FC<batchTableProps> = (
 
   const importTimesheet = async (e) => {
     const weekEnding = endOfWeek(state.timesheetDate, { weekStartsOn: 1 });
-    const timesheetData = await ads.getTimesheets(
+    let timesheetData = await ads.getTimesheets(
       format(weekEnding, "yyyy-MM-dd")
     );
+    console.log(timesheetData);
+    timesheetData.forEach((entry) => {
+      entry.weekending = formatDate(entry.weekending);
+    });
     const activityData = timesheetData.map((project) => []);
     setState({ ...state, tableData: timesheetData, activityData });
     Props.setTableDataMain(timesheetData);
     handleTimesheetClose();
+  };
+
+  const formatDate = (date) => {
+    let [year, month, day] = date.split("-");
+    return `${month}/${day}/${year}`;
   };
 
   const importADS = (

@@ -1,250 +1,272 @@
-import * as React from 'react';
-import { ActivityTypeForm } from './ActivityTypeForm'
-import { DetailsForm } from './DetailsForm'
-import { Copyright } from './Copyright'
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import { makeStyles, Theme } from '@material-ui/core';
-import { StyleRules } from '@material-ui/styles';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
-import validator from '../../../utils/FormValidate';
-import { Review } from './ReviewPage'
-import { submitBatchActivities } from '../../../utils/SubmitActivity'
+import * as React from "react";
+import { ActivityTypeForm } from "./ActivityTypeForm";
+import { DetailsForm } from "./DetailsForm";
+import { Copyright } from "./Copyright";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
+import { makeStyles, Theme } from "@material-ui/core";
+import { StyleRules } from "@material-ui/styles";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Toolbar from "@material-ui/core/Toolbar";
+import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
+import validator from "../../../utils/FormValidate";
+import { Review } from "./ReviewPage";
+import { submitBatchActivities } from "../../../utils/SubmitActivity";
 
-const useStyles = makeStyles((theme: Theme): StyleRules  => ({
-  appBar: {
-    position: 'relative',
-  },
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(1),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 620,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+const useStyles = makeStyles(
+  (theme: Theme): StyleRules => ({
+    appBar: {
+      position: "relative",
     },
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
+    layout: {
+      width: "auto",
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(1),
+      [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+        width: 620,
+        marginLeft: "auto",
+        marginRight: "auto",
+      },
     },
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-  },
-  multipleSubmission: {
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(1)
-  }
-}));
+    paper: {
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(2),
+      [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+        marginTop: theme.spacing(6),
+        marginBottom: theme.spacing(6),
+        padding: theme.spacing(3),
+      },
+    },
+    stepper: {
+      padding: theme.spacing(3, 0, 5),
+    },
+    buttons: {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
+    button: {
+      marginTop: theme.spacing(3),
+      marginLeft: theme.spacing(1),
+    },
+    multipleSubmission: {
+      marginTop: theme.spacing(2),
+      marginLeft: theme.spacing(1),
+    },
+  })
+);
 
-const steps = ['Activity Type', 'Details', 'Review']
+const steps = ["Activity Type", "Details", "Review"];
 
 export const DeReportingForm: React.FC<{}> = () => {
- 
   const classes = useStyles();
   const [state, setState] = React.useState({
     activeStep: 1,
-    errorMessage: '',
-    activityType: 'multiple',
+    errorMessage: "",
+    activityType: "multiple",
     activityDate: new Date(),
     submitted: false,
     details: {
       techpillarFeature: false,
-      milestone: false
+      milestone: false,
     },
     batchDetails: [],
     batchData: [],
-    tableData: []
+    tableData: [],
   });
 
   const getStepContent = () => {
     switch (state.activeStep) {
       case 0:
         // activity type page
-        return <ActivityTypeForm 
-                  setActivityTypeDate={((a) => setState(prevState => {
-                    let newState = prevState
-                    
-                    if (prevState.activityType != a['activityType']) {
-                      newState.details = {
-                        techpillarFeature: false,
-                        milestone: false
-                      }
-                    }
+        return (
+          <ActivityTypeForm
+            setActivityTypeDate={(a) =>
+              setState((prevState) => {
+                let newState = prevState;
 
-                    newState.activityType = a['activityType']
-                    newState.activityDate = a['activityDate']
-                    newState.details = {...newState.details,
-                      techpillarFeature: a['techpillarFeature'],
-                      milestone: a['milestone']
-                    }
-                    
-                    return newState
-                  }))} 
-                  checkbox={{techpillarFeature: state.details['techpillarFeature'], milestone: state.details['milestone']}}
-                  details={{activityType: state.activityType, 
-                    activityDate: state.activityDate, 
-                    techpillarFeature: state.details.techpillarFeature,
-                    milestone: state.details.milestone
-                  }}
-              />
+                if (prevState.activityType != a["activityType"]) {
+                  newState.details = {
+                    techpillarFeature: false,
+                    milestone: false,
+                  };
+                }
+
+                newState.activityType = a["activityType"];
+                newState.activityDate = a["activityDate"];
+                newState.details = {
+                  ...newState.details,
+                  techpillarFeature: a["techpillarFeature"],
+                  milestone: a["milestone"],
+                };
+
+                return newState;
+              })
+            }
+            checkbox={{
+              techpillarFeature: state.details["techpillarFeature"],
+              milestone: state.details["milestone"],
+            }}
+            details={{
+              activityType: state.activityType,
+              activityDate: state.activityDate,
+              techpillarFeature: state.details.techpillarFeature,
+              milestone: state.details.milestone,
+            }}
+          />
+        );
       case 1:
         // details page
-        return <DetailsForm 
-                  setDetails={(d) => {
-                    
-                    setState((prevState: any) => {
-                    if (prevState.activityType != 'multiple') {
-                      
-                      return {...prevState, details: d}
-                    } 
-                    return {...prevState, batchDetails: d}
-                    })
-                  }}
-                  activityType={state.activityType}
-                  subState={state.details}
-                  setValidationError={validationError}
-                  batchData={state.batchData}
-                  setBatchDataMain={((flattened, raw) => setState(prevState => ({...prevState, batchData: raw, batchDetails: flattened})))}
-                  batchDetails={state.batchDetails}
-                  tableData = {state.tableData}
-                  setTableDataMain = {(tableData) => setState({...state, tableData})}
-                  notBatch={state.activityType != 'multiple'}
-                />
+        return (
+          <DetailsForm
+            setDetails={(d) => {
+              setState((prevState: any) => {
+                if (prevState.activityType != "multiple") {
+                  return { ...prevState, details: d };
+                }
+                return { ...prevState, batchDetails: d };
+              });
+            }}
+            activityType={state.activityType}
+            subState={state.details}
+            setValidationError={validationError}
+            batchData={state.batchData}
+            setBatchDataMain={(flattened, raw) =>
+              setState((prevState) => ({
+                ...prevState,
+                batchData: raw,
+                batchDetails: flattened,
+              }))
+            }
+            batchDetails={state.batchDetails}
+            tableData={state.tableData}
+            setTableDataMain={(tableData) => setState({ ...state, tableData })}
+            notBatch={state.activityType != "multiple"}
+          />
+        );
       case 2:
         // review page
-        return <Review 
-                    details={formatDataToSave()}
-                />
+        return <Review details={formatDataToSave()} />;
       default:
-        throw new Error('Unknown step');
+        throw new Error("Unknown step");
     }
-  }
+  };
 
   const formatDataToSave = () => {
-    if (state.activityType != 'multiple') {
-  
+    if (state.activityType != "multiple") {
       const formattedOut = {
-        activityType: state.activityType, 
+        activityType: state.activityType,
         activityDate: state.activityDate,
         techpillarFeature: state.details.techpillarFeature,
         milestone: state.details.milestone,
-        hours: state.details['hours'],
-        projectName: ''
-      }
-      let formattedDetails = {...state.details}
-      delete formattedDetails.techpillarFeature
-      delete formattedDetails.milestone
-      delete formattedDetails['hours']
+        hours: state.details["hours"],
+        projectName: "",
+      };
+      let formattedDetails = { ...state.details };
+      delete formattedDetails.techpillarFeature;
+      delete formattedDetails.milestone;
+      delete formattedDetails["hours"];
 
-      return [{...formattedOut, details: formattedDetails}]
+      return [{ ...formattedOut, details: formattedDetails }];
     }
     return state.batchDetails.map((activity) => {
-      delete activity.details.projectHours
-      delete activity.details.hours
-      return activity
-    })
-  }
+      delete activity.details.projectHours;
+      delete activity.details.hours;
+      return activity;
+    });
+  };
   const validationError = (message: string) => {
-    setState({...state, errorMessage: message})
+    setState({ ...state, errorMessage: message });
     setTimeout(() => {
-      setState(prevState => ({...prevState, errorMessage: ''}))
-    }, 5000)
-  }
+      setState((prevState) => ({ ...prevState, errorMessage: "" }));
+    }, 5000);
+  };
 
   const validateInputs = () => {
-    return validator(state)
-  }
+    return validator(state);
+  };
 
   const handleNext = async () => {
-    console.log('main state', state)
+    console.log("main state", state);
     // handle validation errors
-    let message = validateInputs()
-
+    let message = validateInputs();
 
     // submit data if in review page
     if (state.activeStep === 2) {
-      
       try {
-        let data = formatDataToSave()
-        setState({...state, submitted: true})
-        await submitBatchActivities(data)
-        setState({...state, submitted: false})
+        let data = formatDataToSave();
+        setState({ ...state, submitted: true });
+        await submitBatchActivities(data);
+        setState({ ...state, submitted: false });
       } catch (e) {
-        console.log(e)
-        message = 'There was an error with the submission! Please contact your office digital leader.'
+        console.log(e);
+        message =
+          "There was an error with the submission! Please contact your office digital leader.";
       }
     }
 
-    if (message != '') {
-      validationError(message)
+    if (message != "") {
+      validationError(message);
     } else {
-      setState(prevState => ({...prevState, 
-        activeStep: prevState.activeStep + 1, errorMessage: ''}))
+      setState((prevState) => ({
+        ...prevState,
+        activeStep: prevState.activeStep + 1,
+        errorMessage: "",
+      }));
     }
-  }
+  };
 
   const handleBack = () => {
-    let nextStep
-    let activityType = state.activityType
-    if (state.activeStep == 0){
-      nextStep = state.activeStep + 1
-      activityType = 'multiple'
+    let nextStep;
+    let activityType = state.activityType;
+    if (state.activeStep == 0) {
+      nextStep = state.activeStep + 1;
+      activityType = "multiple";
     } else {
-      nextStep = state.activeStep - 1
+      nextStep = state.activeStep - 1;
     }
-    setState(prevState => ({...prevState, 
-        activityType,
-        activeStep: nextStep}))
-  }
+    setState((prevState) => ({
+      ...prevState,
+      activityType,
+      activeStep: nextStep,
+    }));
+  };
 
   const handleNewSubmission = () => {
-    setState(prevState => ({...prevState, 
-      activeStep: 1, 
-      activityType: 'multiple',
+    setState((prevState) => ({
+      ...prevState,
+      activeStep: 1,
+      activityType: "multiple",
       activityDate: new Date(),
       details: {
         techpillarFeature: false,
-        milestone: false
+        milestone: false,
       },
       batchData: [],
-      batchDetails: []
-  }))
-  }
-  
+      batchDetails: [],
+    }));
+  };
+
   const handleMultiple = () => {
-    setState(prevState => ({...prevState, 
+    setState((prevState) => ({
+      ...prevState,
       activeStep: 0,
-      activityType: ''
-  }))
-  }
+      activityType: "",
+    }));
+  };
 
   return (
     <React.Fragment>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      ></link>
       <CssBaseline />
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
@@ -258,24 +280,31 @@ export const DeReportingForm: React.FC<{}> = () => {
           <Typography component="h1" variant="h4" align="center">
             Digital activity submission
           </Typography>
-          {state.activityType != 'multiple' ? (
-            <Stepper activeStep={state.activeStep} className={classes.stepper} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+          {state.activityType != "multiple" ? (
+            <Stepper
+              activeStep={state.activeStep}
+              className={classes.stepper}
+              alternativeLabel
+            >
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
           ) : (
-            <Stepper activeStep={state.activeStep-1} className={classes.stepper} alternativeLabel>
-            {steps.slice(1, steps.length).map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          )
-        }
+            <Stepper
+              activeStep={state.activeStep - 1}
+              className={classes.stepper}
+              alternativeLabel
+            >
+              {steps.slice(1, steps.length).map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          )}
           <React.Fragment>
             {state.activeStep === steps.length ? (
               <React.Fragment>
@@ -283,72 +312,78 @@ export const DeReportingForm: React.FC<{}> = () => {
                   Your activity has been submited!
                 </Typography>
                 <Typography variant="subtitle1">
-                  {'Want to know how often digital activities are undertaken? Take a look at the statistics '}
-                  <Link color="primary" href="https://arup.sharepoint.com/sites/TnRDigital_39-200/SitePages/DEReport.aspx">
+                  {
+                    "Want to know how often digital activities are undertaken? Take a look at the statistics "
+                  }
+                  <Link
+                    color="primary"
+                    href="https://app.powerbi.com/groups/667ec446-b0a7-4204-900b-9f7784e9eacb/reports/8b85c40c-6a2a-4419-87ad-fc31ecf840ac?ctid=4ae48b41-0137-4599-8661-fc641fe77bea"
+                  >
                     here.
                   </Link>
                 </Typography>
                 <div className={classes.buttons}>
                   <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleNewSubmission}
-                      className={classes.button}
-                    >
-                      New submission
-                    </Button>
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNewSubmission}
+                    className={classes.button}
+                  >
+                    New submission
+                  </Button>
                 </div>
-                
               </React.Fragment>
             ) : (
               <React.Fragment>
                 {getStepContent()}
-                
-                {state.activeStep == 1 && state.activityType == 'multiple' && ( 
-                  <div className={classes.multipleSubmission}>
-                    or <Link onClick={handleMultiple}>submit single activity.</Link>
-                  </div>
-                  )
-                
-                  }
-                <div className={classes.buttons}>
-                  {state.activeStep != 1 || state.activityType != 'multiple' ? (
-                    <Button onClick={handleBack} className={classes.button}>
-                        Back
-                    </Button>
-                    ) : null}
-                  
-                  {!state.submitted ? (<Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {state.activeStep === steps.length - 1 ? 'Submit' : 'Next'}
-                  </Button>) : (
-                    <Button
-                    disabled
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                  >
-                    {'Submit'}
-                  </Button>
 
+                {state.activeStep == 1 && state.activityType == "multiple" && (
+                  <div className={classes.multipleSubmission}>
+                    or{" "}
+                    <Link onClick={handleMultiple}>
+                      submit single activity.
+                    </Link>
+                  </div>
+                )}
+                <div className={classes.buttons}>
+                  {state.activeStep != 1 || state.activityType != "multiple" ? (
+                    <Button onClick={handleBack} className={classes.button}>
+                      Back
+                    </Button>
+                  ) : null}
+
+                  {!state.submitted ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {state.activeStep === steps.length - 1
+                        ? "Submit"
+                        : "Next"}
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                    >
+                      {"Submit"}
+                    </Button>
                   )}
                 </div>
               </React.Fragment>
             )}
           </React.Fragment>
-          <br/>
-          {state.errorMessage != '' && (
-                <Alert severity="error">{state.errorMessage}</Alert>
-                )
-          }
+          <br />
+          {state.errorMessage != "" && (
+            <Alert severity="error">{state.errorMessage}</Alert>
+          )}
         </Paper>
         <Copyright />
       </main>
     </React.Fragment>
   );
-}
-
+};
